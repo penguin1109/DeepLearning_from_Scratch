@@ -12,11 +12,11 @@
 - 데이터의 형상이 무시된다는 문제점이 존재한다. 
   - 이미지나 음성 등은 3차원이상의 데이터인데 이를 1차원 데이터로 바꿔 주어야만 완전 연결 계층에 입력이 가능하기 때문이다.
 
-- 합성곱 계층의 입출력 데이터는 **특징맵(feature map)**이라고 한다.
+- 합성곱 계층의 입출력 데이터는 **특징맵(feature map)** 이라고 한다.
 
 7.2.2. 합성곱 연산
 - 이미지 처리에서의 필터(간홍 filter 대신 kernell이라는 용어 사용) 연산에 해당한다.
-- 데이터와 필터의 shape는 **(높이, 너비)**로 표현해 준다.
+- 데이터와 필터의 shape는 **(높이, 너비)** 로 표현해 준다.
 
 1. 합성곱 연산은 **filter의 window를 slide**하면서 진행이 된다.
 2. 그리고 입력과 필터에 대응하는 원소끼리 곱한 뒤에 그 총합을 구해준다.(Fused Multiply Add)
@@ -35,20 +35,20 @@
 7.2.4. Stride
 - 필터를 적용하는 위치의 간격을 의미한다.
   - 위에서 지금까지 본 stride의 크기는 1이었지만, 이를 2로 설정하면 filter가 움직이는 칸수가 2로 늘어나게 된다.
-input shape = (H, W)  filter size = (FH, FW)   output size = (OH, OW)   Padding = P    Stride = S  
+input shape = (H, W)      filter size = (FH, FW)       output size = (OH, OW)       Padding = P        Stride = S  
 1. OH = ((H + 2*P - FH) / S) + 1
 2. OW = ((W + 2*P - FW) / S) + 1
 
 7.2.5. 3차원 데이터의 합성곱 연산
-- (세로, 가로, **channel**)이라는 세번째 데이터가 추가가 된다.
+- (높이, 너비, **channel**)이라는 세번째 데이터가 추가가 된다.
 - 이때 channel은 색깔의 형태를 정해주는데, 1이면 흑백의 이미지이고 2이면 RGB의 이미지인 것이다.
   - channel 쪽으로 feature map이 여러 개 있다면 입력 데이터와 필터의 합성곱 연산을 채널마다 수행하고 그 결과를 더해서 하나의 출력을 얻는다.
-  - 주의할 점은 **input shape의 channel 크기와 filter의 channel이 같아야**한다는 것이다.
+  - 주의할 점은 **input shape의 channel 크기와 filter의 channel이 같아야** 한다는 것이다.
 
 7.2.6. 블록으로 생각하기
 - 3차원의 합성곱 연산은 데이터와 필터를 직육면체 블록이라고 생각하면 된다.
 - 3차원 데이터를 다차원 배열로 나타낼 떄는 (channel, height, weight)의 순서로 작성한다.
-- 여기서 출력 데이터는 한장의 특징 맵이 될 것이다. 즉, channel이 1개인 특징 맵인 것이다. 그렇다면 합성곱 연산의 출력으로 **다수의 channel**을 내보내고 싶다면 **filter을 여러개 사용**하면 된다.
+- 여기서 출력 데이터는 한장의 특징 맵이 될 것이다. 즉, channel이 1개인 특징 맵인 것이다. 그렇다면 합성곱 연산의 출력으로 **다수의 channel**을 내보내고 싶다면 **filter을 여러개 사용** 하면 된다.
 - 그래서 입력 데이터의 shape가 (Channel, Height, Width)이고 filter shape가 (Number of Filters, Channel, Height, Width)가 된다.
   - 이때 편향의 형상은 (Number of Filters, 1,1)이어야 한다.
 
